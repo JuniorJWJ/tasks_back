@@ -1,0 +1,7 @@
+node_modules/
+tmp/uploads/*
+!tmp/uploads/.gitkeep
+src/db/rocketq.sqlite
+.vercel
+.env
+.rodando banco free.txt
