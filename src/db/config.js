@@ -1,22 +1,19 @@
-require("dotenv").config(); 
+require("dotenv").config();
 const { Pool } = require("pg");
 
-
 //BANCO EM NUVEM
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // Use variável de ambiente para a URL de conexão
-  ssl: {
-    rejectUnauthorized: true,
-  },
-});
-
-// //BANCO LOCAL
 // const pool = new Pool({
 //   connectionString: process.env.DATABASE_URL, // Use variável de ambiente para a URL de conexão
-//   ssl: false,  // Desabilita o SSL
+//   ssl: {
+//     rejectUnauthorized: true,
+//   },
 // });
 
-
+// //BANCO LOCAL
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL, // Use variável de ambiente para a URL de conexão
+  ssl: false, // Desabilita o SSL
+});
 
 pool.connect((err, client, release) => {
   if (err) {

@@ -21,7 +21,6 @@ const initNewDb = {
       `);
       console.log("Table tasks checked/created");
 
-      
       await client.query("COMMIT");
       console.log("Transaction committed");
     } catch (e) {

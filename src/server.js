@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const server = express();
 const route = require("./route");
@@ -7,8 +5,6 @@ const path = require("path");
 const { resolve } = require("path");
 const cors = require("cors");
 const corsMiddleware = require(".././middlewares/cors.js");
-
-
 
 server.use(corsMiddleware);
 server.set("view engine", "ejs");

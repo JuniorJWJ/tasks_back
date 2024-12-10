@@ -2,17 +2,14 @@ const { Pool } = require("pg");
 const { v4: uuidv4 } = require("uuid");
 const dotenv = require("dotenv");
 
-
 dotenv.config();
 
-
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, 
-  ssl: true,  
+  connectionString: process.env.DATABASE_URL,
+  // ssl: true,
 });
 
 module.exports = {
-  
   async get() {
     try {
       const client = await pool.connect();
@@ -28,15 +25,15 @@ module.exports = {
     }
   },
 
-  
   async create(newTask) {
     try {
       const client = await pool.connect();
-  
-      
-      const result = await client.query(`SELECT COALESCE(MAX(order_field), 0) + 1 AS next_order FROM tasks`);
+
+      const result = await client.query(
+        `SELECT COALESCE(MAX(order_field), 0) + 1 AS next_order FROM tasks`,
+      );
       const nextOrderField = result.rows[0].next_order;
-  
+
       const query = `
         INSERT INTO tasks (id, name, cost, due_date, order_field)
         VALUES ($1, $2, $3, $4, $5)
@@ -48,7 +45,7 @@ module.exports = {
         newTask.dueDate,
         nextOrderField,
       ];
-  
+
       await client.query(query, values);
       client.release();
     } catch (error) {
@@ -57,7 +54,6 @@ module.exports = {
     }
   },
 
-  
   async delete(id) {
     try {
       const client = await pool.connect();
@@ -73,7 +69,6 @@ module.exports = {
     }
   },
 
-  
   async update(updatedTask, taskId) {
     try {
       const client = await pool.connect();
@@ -85,7 +80,13 @@ module.exports = {
           order_field = $4
         WHERE id = $5
       `;
-      const values = [updatedTask.name, updatedTask.cost, updatedTask.dueDate, updatedTask.orderUpdate, taskId];
+      const values = [
+        updatedTask.name,
+        updatedTask.cost,
+        updatedTask.dueDate,
+        updatedTask.orderUpdate,
+        taskId,
+      ];
       await client.query(query, values);
       client.release();
     } catch (error) {
@@ -94,7 +95,6 @@ module.exports = {
     }
   },
 
-  
   async findByName(taskName, excludeId = null) {
     try {
       const client = await pool.connect();
@@ -160,5 +160,5 @@ module.exports = {
       console.error("Error updating order field:", error);
       throw error;
     }
-  }
+  },
 };
